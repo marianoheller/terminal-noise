@@ -27,12 +27,43 @@ function queryConfig(comNames) {
 
 function queryAction() {
     const queryActions = {
-        
+        type: 'list',
+        name: 'actionName',
+        message: 'Elija que desea hacer',
+        choices:[
+            {
+                name: 'Leer buffer del puerto',
+                value: 'read'
+            },
+            {
+                name: 'Escuchar puerto (flowing mode)',
+                value: 'listen'
+            },
+            {
+                name: 'Escribir puerto',
+                value: 'write'
+            }
+        ]
     }
+    return inquirer.prompt([queryActions]).then(answers => {
+        return answers.actionName;
+    });
+}
+
+
+function waitForCancel() {
+    process.on('SIGINT', function() {
+        console.log("Caught interrupt signal");
+        process.exit();
+    });
+    console.log("asd");
+    while(1);
 }
 
 
 
 module.exports = {
-    queryConfig
+    queryConfig,
+    queryAction,
+    waitForCancel
 }

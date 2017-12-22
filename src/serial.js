@@ -30,10 +30,18 @@ function openPort(portname, baudRate, extraOptions) {
 function init( config , extraOptions ) {
     openPort(config.comName, config.baudRate, extraOptions );
     port.on('data', console.log );
+    return;
 }
 
+function read() {
+    console.log("Making single read");
+    return port.read();
+}
 
-
+function listen() {
+    console.log("Listening port...");
+    port.resume();
+}
 
 function assignCallback( event, cb ) {
     if( !port ) throw Error('Port must be initialized first');
@@ -41,8 +49,26 @@ function assignCallback( event, cb ) {
 }
 
 
+function performAction( actionName ) {
+    switch(actionName) {
+        case 'read':
+            console.log(read());
+            break;
+        case 'listen':
+            return listen();
+            break;
+        case 'write':
+            console.log("WRINTING");
+            break;
+        default:
+            throw Error('Action name not valid');
+            break;
+    }
+}
+
 
 module.exports = {
     listComNames,
-    init
+    init,
+    performAction
 }
